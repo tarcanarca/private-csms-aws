@@ -1,0 +1,39 @@
+{
+  "name": "csms",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "packages/domain/*"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b && tsc -p tests/tsconfig.json",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
+    "db:up": "docker compose up -d --wait postgres",
+    "db:down": "docker compose down",
+    "migrate": "npm run build && node apps/charging-control/dist/migrate.js",
+    "dev:control": "npm run build && node apps/charging-control/dist/main.js",
+    "dev:gateway": "npm run build && node apps/ocpp-gateway/dist/main.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.6",
+    "@types/pg": "^8.23.1",
+    "@types/ws": "^8.18.2",
+    "eslint": "^10.15.0",
+    "pg": "^8.23.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.73.0",
+    "vitest": "^4.1.12",
+    "ws": "^8.23.0"
+  }
+}

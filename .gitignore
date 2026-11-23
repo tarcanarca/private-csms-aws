@@ -1,0 +1,9 @@
+docs/architecture.md
+
+node_modules/
+dist/
+*.tsbuildinfo
+coverage/
+.env
+.terraform/
+*.tfstate*

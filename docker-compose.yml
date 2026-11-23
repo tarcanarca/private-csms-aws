@@ -1,0 +1,17 @@
+# Local development dependencies only. Phase 1 needs PostgreSQL; Redis/SQS arrive with the phases that use them.
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: csms
+      POSTGRES_PASSWORD: csms
+      POSTGRES_DB: csms
+    ports:
+      - "127.0.0.1:5433:5432" # 5433 avoids clashing with a host PostgreSQL on 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U csms -d csms"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    tmpfs:
+      - /var/lib/postgresql/data # ephemeral: fast, and tests never depend on old state

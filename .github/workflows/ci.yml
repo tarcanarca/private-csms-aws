@@ -1,0 +1,43 @@
+name: ci
+on:
+  push: { branches: [main] }
+  pull_request:
+permissions: { contents: read }
+
+jobs:
+  node:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env: { POSTGRES_USER: csms, POSTGRES_PASSWORD: csms, POSTGRES_DB: postgres }
+        ports: ["5433:5432"]
+        options: >-
+          --health-cmd "pg_isready -U csms" --health-interval 2s --health-timeout 3s --health-retries 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test:unit
+      - run: npm run test:integration
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with: { terraform_version: 1.9.8 }
+      - run: terraform fmt -check -recursive infrastructure/terraform
+      - run: terraform init -backend=false -input=false
+        working-directory: infrastructure/terraform/environments/dev
+      - run: terraform validate
+        working-directory: infrastructure/terraform/environments/dev
+  images:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: { app: [ocpp-gateway, charging-control] }
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build --build-arg APP=${{ matrix.app }} -t csms/${{ matrix.app }}:ci .

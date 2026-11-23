@@ -1,0 +1,12 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/contracts" },
+    { "path": "packages/domain/stations" },
+    { "path": "packages/ocpp-1.6" },
+    { "path": "packages/observability" },
+    { "path": "packages/persistence" },
+    { "path": "apps/charging-control" },
+    { "path": "apps/ocpp-gateway" }
+  ]
+}
