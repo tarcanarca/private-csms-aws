@@ -3,6 +3,18 @@
 Private-network CPO charging station management system (OCPP 1.6J / 2.0.1) on AWS. Architecture baseline:
 [`docs/architecture.md`](docs/architecture.md). Decisions: [`docs/adr/`](docs/adr/).
 
+## Documentation
+
+| Path | Purpose |
+| --- | --- |
+| [`docs/architecture.md`](docs/architecture.md) | Architecture baseline: components, boundaries and data flow. |
+| [`docs/ENVIRONMENTS.md`](docs/ENVIRONMENTS.md) | Environments and how they are configured. |
+| [`docs/DELIVERY.md`](docs/DELIVERY.md) | Build, CI and delivery process. |
+| [`docs/RELIABILITY.md`](docs/RELIABILITY.md) | Reliability expectations and failure-handling behavior. |
+| [`docs/TESTING.md`](docs/TESTING.md) | Test strategy, test layers and how to run them. |
+| [`docs/adr/`](docs/adr/README.md) | Architecture decision records (index in `docs/adr/README.md`). |
+| [`AGENTS.md`](AGENTS.md) | Instructions and conventions for AI coding agents working in this repository. |
+
 ## Status
 
 Phase 0 (foundations) and the first Phase 1 slice are implemented: OCPP 1.6J `BootNotification` (sync, persisted) and
