@@ -18,7 +18,7 @@ resource "aws_ecs_cluster" "this" {
 
 resource "aws_ecr_repository" "app" {
   for_each             = toset(["ocpp-gateway", "charging-control"])
-  name                 = "csms/${each.key}"
+  name                 = each.key
   image_tag_mutability = "IMMUTABLE"
   image_scanning_configuration { scan_on_push = true }
 }

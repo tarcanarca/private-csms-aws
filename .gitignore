@@ -7,3 +7,6 @@ coverage/
 .terraform/
 *.tfstate*
 .kiro/specs/*
+
+# Terraform variable files may hold account-specific values
+*.tfvars

@@ -22,9 +22,9 @@ resource "aws_security_group" "this" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "pg" {
-  for_each                     = toset(var.ingress_security_group_ids)
+  count                        = length(var.ingress_security_group_ids) # count, not for_each: the IDs may be unknown until apply
   security_group_id            = aws_security_group.this.id
-  referenced_security_group_id = each.value
+  referenced_security_group_id = var.ingress_security_group_ids[count.index]
   from_port                    = 5432
   to_port                      = 5432
   ip_protocol                  = "tcp"

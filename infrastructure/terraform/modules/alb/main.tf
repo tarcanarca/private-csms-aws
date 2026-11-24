@@ -39,9 +39,9 @@ resource "aws_vpc_security_group_ingress_rule" "cidr" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "sg" {
-  for_each                     = toset(var.ingress_security_group_ids)
+  count                        = length(var.ingress_security_group_ids) # count, not for_each: the IDs may be unknown until apply
   security_group_id            = aws_security_group.this.id
-  referenced_security_group_id = each.value
+  referenced_security_group_id = var.ingress_security_group_ids[count.index]
   from_port                    = 443
   to_port                      = 443
   ip_protocol                  = "tcp"

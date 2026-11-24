@@ -63,7 +63,7 @@ The following existing `dev` resources do not follow the pattern. They are liste
 | ECS services, task definition families and containers | `ocpp-gateway`, `charging-control` | `environments/dev/main.tf`, `modules/ecs-service` | `csms-<env>-<resource>` |
 | CloudWatch log groups | `/csms/ocpp-gateway`, `/csms/charging-control` | `modules/ecs-service` | Environment token missing |
 | Task security groups, execution roles, task roles | name prefix `ocpp-gateway-...`, `charging-control-...` | `modules/ecs-service` | Environment token missing |
-| ECR repositories | `csms/ocpp-gateway`, `csms/charging-control` | `environments/dev/main.tf` | Environment token missing. The repositories are not environment-specific. |
+| ECR repositories | `ocpp-gateway`, `charging-control` | `environments/dev/main.tf` | Environment token missing. The repositories are not environment-specific. |
 | Secrets Manager secrets | `csms-dev/internal-api-token`, `csms-dev/operator-api-token`, `csms-dev/database-url` | `environments/dev/main.tf` | `/csms/<env>/<service>/<name>`: leading slash and `<service>` segment missing |
 | Terraform state | Local state, no key | `environments/dev/versions.tf` | `csms/<env>/terraform.tfstate` |
 
