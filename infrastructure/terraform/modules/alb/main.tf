@@ -47,6 +47,14 @@ resource "aws_vpc_security_group_ingress_rule" "sg" {
   ip_protocol                  = "tcp"
 }
 
+# Without an egress rule the ALB cannot reach its targets or health checks.
+# Terraform removes AWS's default allow-all egress, so this rule must be explicit.
+resource "aws_vpc_security_group_egress_rule" "all" {
+  security_group_id = aws_security_group.this.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+}
+
 resource "aws_lb" "this" {
   name                       = var.name
   internal                   = var.internal
@@ -90,3 +98,4 @@ resource "aws_lb_listener" "https" {
 output "security_group_id" { value = aws_security_group.this.id }
 output "target_group_arn" { value = aws_lb_target_group.this.arn }
 output "dns_name" { value = aws_lb.this.dns_name }
+output "zone_id" { value = aws_lb.this.zone_id }

@@ -53,6 +53,26 @@ module "internal_alb" {
   ingress_security_group_ids = [module.gateway.security_group_id]
 }
 
+# Private zone for exactly one host, so it does not shadow other records under the parent domain.
+# The internal ALB certificate is issued for this name, not for the amazonaws.com DNS name.
+resource "aws_route53_zone" "internal" {
+  name = var.internal_hostname
+  vpc {
+    vpc_id = module.network.vpc_id
+  }
+}
+
+resource "aws_route53_record" "internal_alb" {
+  zone_id = aws_route53_zone.internal.zone_id
+  name    = var.internal_hostname
+  type    = "A"
+  alias {
+    name                   = module.internal_alb.dns_name
+    zone_id                = module.internal_alb.zone_id
+    evaluate_target_health = true
+  }
+}
+
 module "gateway" {
   source                     = "../../modules/ecs-service"
   name                       = "ocpp-gateway"
@@ -66,7 +86,7 @@ module "gateway" {
   ingress_security_group_ids = [module.public_alb.security_group_id]
   stop_timeout               = 30
   environment = {
-    CONTROL_BASE_URL        = "https://${module.internal_alb.dns_name}"
+    CONTROL_BASE_URL        = "https://${aws_route53_record.internal_alb.fqdn}" # fqdn: record exists before tasks start
     REQUIRE_FORWARDED_HTTPS = "true"
     DRAIN_TIMEOUT_MS        = "20000"
   }

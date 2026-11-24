@@ -10,6 +10,10 @@ variable "internal_certificate_arn" {
   description = "ACM certificate for the internal ALB."
   type        = string
 }
+variable "internal_hostname" {
+  description = "Hostname covered by internal_certificate_arn. A private Route 53 zone resolves it to the internal ALB inside the VPC, so the gateway can reach Charging Control over TLS."
+  type        = string
+}
 variable "gateway_image" {
   description = "ECR image URI for the OCPP Gateway."
   type        = string
